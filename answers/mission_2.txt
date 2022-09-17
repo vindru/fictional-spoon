@@ -1,0 +1,28 @@
+Write notes about your proposal for Mission 2 here.
+
+Write notes about how you would debug here. 3_1.txt
+
+Debugging a failed transaction is a step-wise process
+- Ask the User for other details about the transaction such as estimated date and time, payment method, and the response he/she got on the app.
+- Look at the ledger and verify if the claim is indeed true by the user. 
+- If the ledger has a transaction that the client is talking about but the status of it is pending, then it can either be
+    1. Source bank account has failed to initiate the transaction
+        - ask the source bank account to either cancel the transaction and refund the money or retry the transaction. 
+    2. Destination bank account has failed to deposit money to the beneficiary account
+        - ask the destination bank to complete the transaction
+- Check to see if a transaction with some of the matching params exists, it might be a case of the User accidentally typing in the wrong details of the source account.
+- if the above transactional errors are ruled out we can look at the Tech side of the application 
+    
+    - check telemetry logs from the user's device to see which parameters were sent to the server
+        - try to duplicate the issue on the staging server with the same parameters
+    - check server logs and see if we can see the trace of the server trying to initiate a transactions
+        - check error logs at the same time user tried to initiate the transaction.
+    - If the server performed its functions, it could be a database-level error 
+        - check to see if the DB server failed recently or was restored using a backup. 
+        - check if DB is performing  ATOMIC transactions for banking queries
+    - monitor the health logs of the server and see if any downtime matches the time of the transaction. 
+
+- More minuscule checking involves
+    - check to see if all the softwares and libraries are running the latest version. 
+    - patch commonly known vulnerabilities 
+    
